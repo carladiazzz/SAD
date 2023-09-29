@@ -53,14 +53,17 @@ public int read(){
 }
 
 public String readLine(){
-    //setRaw();
+    setRaw();
+    Line line = new Line();
     int car=0;
-    
-    car=read();
-    
+    while(car!=13){
+        car= read();
+        line.write(car);
+        //System.out.print(line.getPhrase());
+    }
 
 
-        unsetRaw();
+    unsetRaw();
     
 return String.valueOf(car);
     
