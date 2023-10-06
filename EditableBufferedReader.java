@@ -3,15 +3,30 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+/*import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;*/
 
 public class EditableBufferedReader extends BufferedReader{
-
+   /* public interface CLibc extends Library {
+        int system(String command);
+    }
+*/
 public EditableBufferedReader(Reader text){
     super(text);
 }
 
 public void setRaw(){
  String[] comanda = {"/bin/sh", "-c", "stty raw -echo </dev/tty"}; // /bin/sh, per a executar el codi com a una cadena, i amb l'stty configurem el terminal en raw mode
+    
+    /*CLibc libc = Native.load("c", CLibc.class);
+    int resultado = libc.system("stty raw -echo </dev/tty");
+    if(resultado==0){
+        System.err.println("no s ha pogut setRaw()");
+    }
+    else{
+        System.out.print("mode Raw");
+    }*/
     try{
         Runtime.getRuntime().exec(comanda).waitFor(); //Executem la comanda i esperem a que aquesta acabi
     }
@@ -59,7 +74,7 @@ public String readLine(){
     while(car!=13){
         car= read();
         line.write(car);
-        //System.out.print((char) car);
+        System.out.print((char) car);
     }
 
 
