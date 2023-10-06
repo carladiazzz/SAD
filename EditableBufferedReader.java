@@ -60,6 +60,7 @@ public int read(){
     setRaw();
     try{
     caracter= super.read();
+    
     }
     catch(IOException ex){
         ex.printStackTrace();
@@ -73,15 +74,61 @@ public String readLine(){
     int car=0;
     while(car!=13){
         car= read();
+         switch(car){
+            case 127: //Backspace
+            System.out.print("\u001b[1D");
+            System.out.print("\u001b[P");
+            line.backspace(); //(solo borra una vez en line)
+            break;
+
+        //default:
+         }
+
+
         line.write(car);
         System.out.print((char) car);
+        
     }
 
 
     unsetRaw();
     
-return String.valueOf(car);
-    
+return line.getPhrase();  
 }
 
 }
+
+
+
+
+
+/* APUNTES
+
+    Mover el cursor:
+        \u001b[<n>A: Mueve el cursor hacia arriba n líneas.
+        \u001b[<n>B: Mueve el cursor hacia abajo n líneas.
+        \u001b[<n>C: Mueve el cursor hacia la derecha n columnas.
+        \u001b[<n>D: Mueve el cursor hacia la izquierda n columnas.
+
+    Posicionar el cursor:
+        \u001b[<fila>;<columna>H: Posiciona el cursor en la fila y columna especificadas (1-based).
+
+    Borrar la pantalla:
+        \u001b[2J: Borra toda la pantalla.
+        \u001b[1J: Borra desde el cursor hasta el principio de la pantalla.
+        \u001b[0J: Borra desde el cursor hasta el final de la pantalla.
+
+    Borrar la línea actual:
+        \u001b[2K: Borra toda la línea actual.
+        \u001b[1K: Borra desde el cursor hasta el principio de la línea.
+        \u001b[0K: Borra desde el cursor hasta el final de la línea.
+
+    Cambiar el color del texto y fondo:
+        \u001b[<estilo>m: Cambia el estilo de texto y fondo. Algunos valores comunes son 0 (restablecer), 1 (negrita), 2 (dim), 3 (cursiva), 4 (subrayado), 30-37 (colores de texto) y 40-47 (colores de fondo).
+
+    Restablecer los atributos:
+        \u001b[0m: Restablece todos los atributos de estilo y color a sus valores predeterminados.
+
+
+
+*/
