@@ -59,7 +59,7 @@ public String readLine(){
     while(car!=13){
         car= read();
         line.write(car);
-        //System.out.print(line.getPhrase());
+        //System.out.print((char) car);
     }
 
 
