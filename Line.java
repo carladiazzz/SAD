@@ -1,60 +1,61 @@
 import java.io.*;
+//import java.util.Observable;
 
-public class Line{
-	// maintains the status of the line in edition with its corresponding methods.
+public class Line/*extends Observable*/{
 
 	private char[] phrase;
 	private int cursorPosition;
-	private int maxSize = 500;  
+	private int maxSize = 1000;  
 	private int numLetters;
-	//private int insert;
-	//private boolean insert;
 
 
 	public Line(){
 		phrase = new char[maxSize];
 		cursorPosition = 0;
 		numLetters = 0;
-		//insert = 0;
-		//insert = false;
 
 	}
 
 	public void moveRight(){
-		cursorPosition ++;
+		this.cursorPosition = cursorPosition+1;
+		//this.setChanged();
 	}
 
 	public void moveLeft(){
-		cursorPosition --;
+		this.cursorPosition= cursorPosition-1;
+		//this.setChanged();
 	}
 
-	public void moveToInicio(){
+	public void moveToStart(){
 		cursorPosition = 0;
+		//this.setChanged();
 	}
 
-	public void moveToFin(){
+	public void moveToEnd(){
 		cursorPosition = numLetters;
+		//this.setChanged();
 	}
 
-	public void insert(){
-        
+	public void insert(char letter){
+        phrase[cursorPosition] = letter;
+		//this.setChanged();
 	}
 
 	public void suprimir(){
 		for(int i = cursorPosition; i < numLetters; i++){
 			phrase[i] = phrase[i + 1];
 		}
-
 		numLetters --;
+		//this.setChanged();
 	}
 
 	public void backspace(){
 		for(int i = cursorPosition; i < numLetters; i++){
 			phrase[i - 1] = phrase[i]; 
 		}
-
 		cursorPosition --;
 		numLetters --;
+		//this.setChanged();
 	}
 
 	public void write(int letterId) {
@@ -62,11 +63,12 @@ public class Line{
 			phrase[cursorPosition] = letter;
 			numLetters ++;
 			cursorPosition ++;
+			//this.setChanged();
 		}
 
 
 	public String getPhrase(){
-		return String.valueOf(phrase);
+		return String.valueOf(phrase)+"\n"+cursorPosition;
 	}
 
 	public int getCursorPosition(){
@@ -82,3 +84,8 @@ public class Line{
 	}*/
 
 }
+
+
+
+
+
