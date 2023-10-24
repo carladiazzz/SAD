@@ -16,6 +16,8 @@ interface Keys {
 
     public final static int RIGHT = 67; //^[[C
     public final static int LEFT = 68; //^[[D
+    public final static int UP = 65; //^[[A
+    public final static int DOWN = 66; //^[[D
     public final static int FIN = 70; //^[[F
     public final static int INICIO = 72; //^[[H
     public final static int INSERT = 50; //^[[2~
@@ -24,17 +26,21 @@ interface Keys {
     public final static int SUPR = 51;//^[[3~
     public final static int ESTILO = 101;//^[e
 
+
+
     // Conversions de les sequencies d'escape
 
-    public final static int xBACKSPACE = 1000;
-    public final static int xRIGHT = 1001;
-    public final static int xLEFT = 1002;
-    public final static int xINICIO = 1003;
-    public final static int xFIN = 1004;
-    public final static int xINSERT = 1005;
-    public final static int xAVPAG = 1006;
-    public final static int xREPAG = 1007;
-    public final static int xSUPR = 1008;
-    public final static int xESTILO = 1009;
+    public final static int xBACKSPACE = -1;
+    public final static int xRIGHT = -2;
+    public final static int xLEFT = -3;
+    public final static int xINICIO = -4;
+    public final static int xFIN = -5;
+    public final static int xINSERT = -6;
+    public final static int xAVPAG = -7;
+    public final static int xREPAG = -8;
+    public final static int xSUPR = -9;
+    public final static int xESTILO = -10;
+    public final static int xUP = -11;
+    public final static int xDOWN = -12;
 
 }

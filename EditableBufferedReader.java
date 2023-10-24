@@ -1,4 +1,5 @@
 //package P0;
+//HOLA
 
 import java.io.IOException;
 import java.io.Reader;
@@ -6,12 +7,12 @@ import java.io.BufferedReader;
 
 public class EditableBufferedReader extends BufferedReader{
 
-private Line line;
+//private Line2 line;
 private View vista;
 
 public EditableBufferedReader(Reader text){
     super(text);
-    this.line = new Line();
+    //this.line = new Line2();
     this.vista= new View();
 }
 
@@ -49,27 +50,23 @@ public int read() throws IOException{
         caracter= super.read();
         if(caracter>64){//Si després llegim una lletra
             switch (caracter) {
-                case Keys.INSERT:
-                    caracter = Keys.xINSERT;
+                case Keys.INSERT: caracter = Keys.xINSERT;
                     break;
-                case Keys.RIGHT:
-                    caracter = Keys.xRIGHT;
+                case Keys.RIGHT: caracter = Keys.xRIGHT;
                     break;
-                case Keys.LEFT:
-                    caracter = Keys.xLEFT;
+                case Keys.LEFT: caracter = Keys.xLEFT;
                     break;
-                case Keys.INICIO:
-                    caracter= Keys.xINICIO;
+                case Keys.INICIO: caracter= Keys.xINICIO;
                     break;
-                case Keys.FIN:
-                    caracter= Keys.xFIN;
+                case Keys.FIN: caracter= Keys.xFIN;
                     break;
             } 
         }else{ //Si llegim un número
             switch (caracter){
-                case Keys.INSERT:
-                caracter=Keys.xINSERT;
-                break;
+                case Keys.INSERT: caracter=Keys.xINSERT;
+                    break;
+                case Keys.SUPR: caracter= Keys.xSUPR;
+                    break;
             }
             super.read(); //Obviem el "~"
         }
@@ -78,21 +75,27 @@ public int read() throws IOException{
     return caracter;
 }
 
-public String readLine() throws IOException{  //Al tirar para atras se buguea y en vez de imprimir al final "line is ..." en line imprime valores escritos antes
+public String readLine() throws IOException{  
     setRaw();
+    Line2 line =new Line2();
     int caracter=0;
-    while(caracter!=Keys.RETURN){
+    while(caracter!='\r'){
         caracter= read();
          switch(caracter){
+
+            case '\r': break;
+
             case Keys.BACKSPACE: 
-                System.out.print("\u001b[1D"); //Cursor a la dreta
+                System.out.print("\u001b[1D"); //Cursor a la esquerra
                 System.out.print("\u001b[P"); //Esborrem el contingut del cursor
                 line.backspace();
                 break;
 
             case Keys.xRIGHT:
+                try{
                 line.moveRight();
                 System.out.print("\u001b[1C");//Movem cursor a la dreta
+                }catch(InterruptedException ex){}
                 break;
 
             case Keys.xLEFT:
@@ -101,9 +104,14 @@ public String readLine() throws IOException{  //Al tirar para atras se buguea y 
                 break;
 
             case Keys.xINSERT:
-                System.out.print("\u001b[0P"); //Esborrem el contingut del cursor
-                caracter= read(); //Llegim el seguent caracter insertat
                 line.insert((char)caracter);
+                break;
+            
+            case Keys.xSUPR:
+                System.out.print("\u001b[1C");
+                System.out.print("\u001b[P");
+                System.out.print("\u001b[1D");
+                line.supr();
                 break;
 
             case Keys.xINICIO:
@@ -114,60 +122,19 @@ public String readLine() throws IOException{  //Al tirar para atras se buguea y 
 
             case Keys.xFIN:
                 int numLetters= line.getNumLetters();
-                System.out.print("\u001b[0;"+numLetters+"H"); //Movem el cursor al final de la frase
+                System.out.print("\u001b[0"+numLetters+"C"); //Movem el cursor al final de la frase
                 line.moveToEnd();
                 break;
 
             case Keys.xESTILO:
-                vista.restablish();
                 System.out.println("\n\rQue estilo desea?\n\r0 (restablecer)\n\r1 (negrita)\n\r2 (dim)\n\r3 (cursiva)\n\r4 (subrayado)\n\r5 (colores de texto)\n\r6 (colores de fondo)\n\r");
                 caracter=read();
-                switch(caracter){
-                    case 48: //0
-                        System.out.println("Restablecido\n\r");
-                        vista.restablish();
-                        caracter=0; //Para que no se muestre el número escrito en pantalla
-                        break;
-                    case 49: //1
-                        vista.bold();
-                        caracter=0; //Para que no se muestre el número escrito en pantalla
-                        break;
-                    case 50: //2
-                        vista.dim();
-                        caracter=0; //Para que no se muestre el número escrito en pantalla
-                        break;
-                    case 51: //3
-                        vista.italics();
-                        caracter=0; //Para que no se muestre el número escrito en pantalla
-                        break;
-                    case 52: //4
-                        vista.underline();
-                        caracter=0; //Para que no se muestre el número escrito en pantalla
-                        break;
-                    case 53: //5
-                        System.out.println("\n\rSelecciona un color de texto:\n\r0: Negro\n\r1: Rojo \n\r2: Verde \n\r3: Amarillo \n\r4: Azul \n\r5: Magenta (púrpura) \n\r6: Cian (verde azulado) \n\r7: Blanco\n\r");
-                        caracter=read();
-                           if(caracter>47 && caracter<56) //Si el caracter es un nombre entre 0 i 7
-                                vista.changeColor(caracter);
-                           else
-                                System.out.print("Caracter incorrecto!\n\r");
-                        caracter=0; //Para que no se muestre el número escrito en pantalla
-                        break;
-                    case 54: //6
-                        System.out.println("\n\rSelecciona un color de fondo:\n\r0: Negro\n\r1: Rojo \n\r2: Verde \n\r3: Amarillo \n\r4: Azul \n\r5: Magenta (púrpura) \n\r6: Cian (verde azulado) \n\r7: Blanco\n\r");
-                        caracter=read();
-                           if(caracter>47 && caracter<56) //Si el caracter es un nombre entre 0 i 7
-                                vista.changeBackgroundColor(caracter);
-                           else
-                                System.out.print("Caracter incorrecto!\n\r");
-                        caracter=0; //Para que no se muestre el número escrito en pantalla
-                        break;
-                    default:
-                        System.out.println("Caracter incorrecto!\n\r");
-                        break;
-                }
+                vista.style(caracter);
+                caracter=0;
+                break;
+
             default:
-                line.write(caracter);
+                line.write((char)caracter);
                 System.out.print((char) caracter);
                 break;
          }
@@ -175,7 +142,7 @@ public String readLine() throws IOException{  //Al tirar para atras se buguea y 
 
     unsetRaw();
     
-return line.getPhrase();  
+return line.toString();  
 }
 
 }

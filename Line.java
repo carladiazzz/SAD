@@ -1,7 +1,6 @@
 import java.io.*;
-//import java.util.Observable;
 
-public class Line/*extends Observable*/{
+public class Line{
 
 	private char[] phrase;
 	private int cursorPosition;
@@ -13,32 +12,26 @@ public class Line/*extends Observable*/{
 		phrase = new char[maxSize];
 		cursorPosition = 0;
 		numLetters = 0;
-
 	}
 
 	public void moveRight(){
 		this.cursorPosition = cursorPosition+1;
-		//this.setChanged();
 	}
 
 	public void moveLeft(){
 		this.cursorPosition= cursorPosition-1;
-		//this.setChanged();
 	}
 
 	public void moveToStart(){
 		cursorPosition = 0;
-		//this.setChanged();
 	}
 
 	public void moveToEnd(){
 		cursorPosition = numLetters;
-		//this.setChanged();
 	}
 
 	public void insert(char letter){
         phrase[cursorPosition] = letter;
-		//this.setChanged();
 	}
 
 	public void suprimir(){
@@ -46,7 +39,6 @@ public class Line/*extends Observable*/{
 			phrase[i] = phrase[i + 1];
 		}
 		numLetters --;
-		//this.setChanged();
 	}
 
 	public void backspace(){
@@ -55,15 +47,12 @@ public class Line/*extends Observable*/{
 		}
 		cursorPosition --;
 		numLetters --;
-		//this.setChanged();
 	}
 
-	public void write(int letterId) {
-            char letter= (char) letterId; 
+	public void write(char letter) {
 			phrase[cursorPosition] = letter;
 			numLetters ++;
 			cursorPosition ++;
-			//this.setChanged();
 		}
 
 
@@ -78,10 +67,6 @@ public class Line/*extends Observable*/{
 	public int getNumLetters(){
 		return numLetters;
 	}
-
-	/*public boolean getInsertarState(){
-		return insert;
-	}*/
 
 }
 
