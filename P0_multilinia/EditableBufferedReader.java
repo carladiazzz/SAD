@@ -39,10 +39,10 @@ public int read() throws IOException{
     caracter= super.read();
     if(caracter==Keys.ESC){
         caracter=super.read(); //Obviem el "["
-        /*if(caracter==Keys.ESTILO){
+        if(caracter==Keys.ESTILO){
             caracter= Keys.xESTILO;
             return caracter;
-        }*/
+        }
 
         caracter= super.read();
         if(caracter>64){//Si després llegim una lletra
@@ -118,14 +118,14 @@ public String readLine() throws IOException{
                 break;
 
             case Keys.xINICIO:
-                int col= line.getcol();
-                System.out.print("\u001b["+col+"D"); //Movem el cursor a la esquerra 'col' cops
+                int col= line.getcol()+1;
+                System.out.print("\u001b["+col+"D"); //Movem el cursor a la esquerra 'col'+1 cops
                 line.moveToStart();
                 break;
 
             case Keys.xFIN:
                 int numLetters= line.getNumLetters();
-                System.out.print("\u001b[0"+numLetters+"C"); //Movem el cursor al final de la frase
+                System.out.print("\u001b[0"+numLetters+"C"); //Movem el cursor al final de la linia actual
                 line.moveToEnd();
                 break;
 
@@ -153,17 +153,19 @@ public String readLine() throws IOException{
                         line.moveDown(1);
                     }
                 }
+                break;
 
             case Keys.xREPAG:
-                    System.out.print("\u001b["+line.terminalrows()+"A"); //Movem cursor a la adalt
+                    System.out.print("\u001b["+line.terminalrows()+"A"); //Movem cursor adalt
                     line.moveUp(line.terminalrows());
+                break;
 
-            /*case Keys.xESTILO:
+            case Keys.xESTILO:
                 System.out.println("\n\rQue estilo desea?\n\r0 (restablecer)\n\r1 (negrita)\n\r2 (dim)\n\r3 (cursiva)\n\r4 (subrayado)\n\r5 (colores de texto)\n\r6 (colores de fondo)\n\r");
                 caracter=read();
                 vista.style(caracter);
                 caracter=0;
-                break;*/
+                break;
 
             default:
                 line.write((char)caracter);
