@@ -57,22 +57,21 @@ public class SlideBarPercent {
       setRaw();
       value = new Value();
       conBar = new ConsoleBar(value);
-      //...
+      
       conPer = new ConsolePercent(value);
       //...
       value.addObserver(conBar);
-      value.addObserver(conPer);
+      //value.addObserver(conPer);
       
-      while ((arrow = readArrow()) != '\r')
+      while ((arrow = readArrow()) != '\r'){
         if (arrow == RIGHT)
-          value.inc();
+          value.inc(conPer);
         else
-          value.dec();
+          value.dec(conPer);
+      }
     } finally {
       unsetRaw();
       //...
-      conPer.update(value,conBar);
-      conBar.update(value,conPer);
     }
   }
 }

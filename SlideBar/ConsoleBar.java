@@ -23,7 +23,7 @@ class ConsoleBar implements Observer {
 
 		// get max columns
 		cmax= getMax();
-		value.setMax(cmax);	
+		model.setMax(cmax);	
 		
 	}
 	
@@ -39,17 +39,20 @@ class ConsoleBar implements Observer {
 	
 	public void update(Observable o, Object arg) {
 		Command comm = (Command) arg;
+		if(model.get()<=(cmax/2+1) || model.get()>(cmax/2+3)){
 		switch (comm.op) {
 			case INC:
 				System.out.print(BLOCK);
 				break;
 			case DEC:
 				// delete char to the left
-				
+				System.out.print("\u001b[D"); //Cursor a l'esquerra
+				System.out.print("\u001b[P"); // Esborrar cursor
 				break;
 			case BELL:
 				System.out.print('\007');
 				break;
+		}
 		}
 	}
 }

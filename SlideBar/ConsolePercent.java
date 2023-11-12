@@ -14,15 +14,19 @@ class ConsolePercent implements Observer {
 	  }
 	}
 
-	int cmax;
+	int cmax, rmax;
+	int cursor;
+	int per;
 	Value model;
   
 	ConsolePercent(Value value) throws IOException {
 		model = value;
-		
+		cursor=0;
+		per=0;
 		// get max columns
 		cmax= getMax();
-		value.setMax(cmax);		
+		rmax= getRowMax();
+		model.setMax(cmax);		
 		// write 0%
 		System.out.print("\u001b["+cmax/2+"C"+value.get()+'%');
 		System.out.print("\u001b["+(cmax/2+2)+"D");
@@ -37,20 +41,30 @@ class ConsolePercent implements Observer {
 
 		return cmax;
 	}
+
+	int getRowMax() throws IOException{
+		Process process = new ProcessBuilder("tput", "lines").start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = reader.readLine();
+            if (line != null) 
+                rmax = Integer.parseInt(line);
+
+		return rmax;
+	}
 	
 	public void update(Observable o, Object arg) {
 		//restore();
+		cursor = model.get();
+		per= (cursor*100/cmax);
 		Command comm = (Command) arg;
 		switch (comm.op) {
-			case INC: 
 			case DEC: 
-				System.out.print("\u001b["+cmax/2+"C"+value.get()+'%');
-				if(value.get()<cmax/2){
-					System.out.print("\u001b["+(cmax/2-value.get())+"C");
-				}else{
-					System.out.print("\u001b["+(cmax/2-value.get())+"D");
-				}
+			case INC: 
+				System.out.print("\033["+rmax+";"+(cmax/2+1)+"H"); //Posicionem el cursor al mig de la pantalla i la útlima fila
+				System.out.print(per+"%");
+				System.out.print("\033["+rmax+";"+cursor+"H"); //Posicionem el cursor a la seva posició
 				// write Value%
+				
 				break;
 			case BELL:
 				System.out.print('\007');
