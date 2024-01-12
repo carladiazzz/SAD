@@ -1,0 +1,1 @@
+En aquesta versió de la pràctica 0, s'ha implementat que es puguin llegir les línies desitjades per teclat, no només una. Per fer-ho, a la classe Line s'ha afegit una List on es va guardant cada línia per separat. També es fa servir la classe StringBuilder, ja que en general es la més preferible quan estem treballant amb concatenació de cadenes.
